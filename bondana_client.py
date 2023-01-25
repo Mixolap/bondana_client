@@ -34,7 +34,7 @@ def cast_to_bond_price(v):
     price = v
     units = math.floor(price)
     nano = math.floor((price-units) * 1e9 + 0.1)
-    print(price, units, nano)
+    # print(price, units, nano)
     return Quotation(units=units, nano=nano)
 
 
@@ -139,7 +139,7 @@ class OperationsApi(object):
             return GetOperationsByCursorRequest(account_id=self.account.id, from_=from_, to=to, limit=limit, state=OPERATION_STATE_EXECUTED, cursor=cursor)
         with Client(self.token, target=INVEST_GRPC_API) as client:
             operations = client.operations.get_operations_by_cursor(get_request("", from_, to, limit))
-            print(operations)
+            # print(operations)
             return [self.operationToJson(op) for op in operations.items]
 
 
@@ -184,7 +184,7 @@ class MarketApi(object):
 class Bondana(object):
     _token = ''
     _account = None
-    
+
     def __init__(self, token):
         self._token = token        
         with Client(token, target=INVEST_GRPC_API) as client:
