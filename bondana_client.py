@@ -36,12 +36,6 @@ def cast_to_bond_price(v):
     return Quotation(units=units, nano=nano)
 
 
-def operationType(tp):
-    if tp==22:
-        return "Sell"
-    raise(tp)
-
-
 class OrdersApi(object):
     token = None
     account = None
@@ -73,13 +67,11 @@ class OrdersApi(object):
 
         with Client(self.token, target=INVEST_GRPC_API) as client:
             data = client.orders.post_order(account_id=self.account.id, figi=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
-            print(data)
             return data
 
     def orders_cancel_post(self, order_id):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             data = client.orders.cancel_order(account_id=self.account.id, order_id=order_id)
-            print(data)
             return data
 
 
@@ -113,7 +105,6 @@ class OperationsApi(object):
         operation_id = op.id
         if self.getOperationType(op.type)=="Coupon":
             operation_id=op.date.strftime('%Y%m%d%H%M%S')
-            print(op)
         return {
             "broker_account_id": op.broker_account_id,
             "id": operation_id,
@@ -163,7 +154,6 @@ class MarketApi(object):
 
     def market_orderbook_get_dict(self, figi, depth):
         o = self.market_orderbook_get(figi, depth)
-        # print(o)
         return {
             "figi": o.figi,
             "depth": o.depth,
