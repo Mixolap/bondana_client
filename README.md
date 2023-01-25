@@ -21,11 +21,11 @@ $ git clone https://github.com/Mixolap/bondana_client.git
 ### Инициализация клиента
 
 ```python
-from bondana_client.bondana_client import openapi_api_client
+from bondana_client.bondana_client import Bondana
 
 TOKEN = 'token'
 
-client = openapi_api_client(TOKEN)
+client = Bondana(TOKEN)
 ```
  
 ### Получить баланс свободных денег в рублях 

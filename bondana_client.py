@@ -181,9 +181,10 @@ class MarketApi(object):
             return client.market_data.get_order_book(figi=figi, depth=depth)
 
 
-class OpenApi(object):
+class Bondana(object):
     _token = ''
     _account = None
+    
     def __init__(self, token):
         self._token = token        
         with Client(token, target=INVEST_GRPC_API) as client:
@@ -212,7 +213,3 @@ class OpenApi(object):
             if m.currency==currency:
                 blocked = cast_money(m)
         return (balance, blocked)
-
-
-def openapi_api_client(token):
-    return OpenApi(token)
