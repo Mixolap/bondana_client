@@ -96,5 +96,6 @@ for order in client.orders.orders_get_json():
 ### Просмотр стакана по figi
 
 ```python
-
+figi = "BBG00Y9B45C2"
+orderbook = client.market.market_orderbook_get_dict(figi, 20)
 ```

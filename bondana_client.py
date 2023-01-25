@@ -131,7 +131,6 @@ class OperationsApi(object):
             "instrument_type": getInstrumentType(op.instrument_kind),
         }        
 
-
     def operations_get(self, from_, to, limit):
         def get_request(cursor, from_, to, limit):
             return GetOperationsByCursorRequest(account_id=self.account.id, from_=from_, to=to, limit=limit, state=OPERATION_STATE_EXECUTED, cursor=cursor)
