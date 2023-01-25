@@ -16,15 +16,18 @@ def getInstrumentType(v):
     if v==3: return "Currency"
     raise Exception("unknown operation type", v)
 
+
 def cast_count(v):
     return v.units
+
 
 def cast_money(v):
     return v.units + v.nano / 1e9 #
 
+
 def dateToString(v):
     return v.astimezone(timezone(timedelta(hours=3), 'Europe/Moscow')).strftime('%Y-%m-%d %H:%M:%S.%f')
-    # return v.strftime()
+
 
 def cast_to_bond_price(v):
     # price = v/BOND_NOMINAL
@@ -197,6 +200,18 @@ class OpenApi(object):
 
     def comission(self):
         return 0.5
+
+    def get_balance(self, currency='rub'):
+        balance= 0
+        blocked = 0
+        currencies = self.portfolio.portfolio_currencies_get()
+        for m in currencies.money:
+            if m.currency == currency:
+                balance = cast_money(m)
+        for m in currencies.blocked:
+            if m.currency==currency:
+                blocked = cast_money(m)
+        return (balance, blocked)
 
 
 def openapi_api_client(token):
