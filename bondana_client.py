@@ -30,11 +30,9 @@ def dateToString(v):
 
 
 def cast_to_bond_price(v):
-    # price = v/BOND_NOMINAL
     price = v
     units = math.floor(price)
     nano = math.floor((price-units) * 1e9 + 0.1)
-    # print(price, units, nano)
     return Quotation(units=units, nano=nano)
 
 
@@ -174,10 +172,8 @@ class MarketApi(object):
             "asks": [{"price": round(cast_money(d.price)*BOND_NOMINAL, 7), "quantity": d.quantity} for d in o.asks],
         }
 
-
     def market_orderbook_get(self, figi, depth):
         with Client(self.token, target=INVEST_GRPC_API) as client:
-            # print(dir(client.market_data))
             return client.market_data.get_order_book(figi=figi, depth=depth)
 
 
