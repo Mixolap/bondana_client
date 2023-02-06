@@ -65,14 +65,14 @@ lots  = 1
 price = 987.65
 figi = "BBG00Y9B45C2"
 order_limit = client.orders.orders_limit_order_post(figi, 
-	limit_order_request = {"lots": lots, "operation": "Buy", "price":price, "message": "custom_message",})  
+	limit_order_request = {"lots": lots, "operation": "Buy", "price":price, })  
 
 # лимитная заявка на продажу
 lots  = 1
 price = 997.65
 figi = "BBG00Y9B45C2"
 order_limit = client.orders.orders_limit_order_post(figi, 
-	limit_order_request = {"lots": lots, "operation": "Sell", "price":price, "message": "custom_message",})                
+	limit_order_request = {"lots": lots, "operation": "Sell", "price":price, })                
 ```
 
 ### Получение списка активных заявок
@@ -99,3 +99,12 @@ for order in client.orders.orders_get_json():
 figi = "BBG00Y9B45C2"
 orderbook = client.market.market_orderbook_get_dict(figi, 20)
 ```
+
+
+## TODO:
+
+получение списка доступных облигаций
+
+получение лотности
+
+шаг цены

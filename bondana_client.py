@@ -1,14 +1,16 @@
 import math
+
 from datetime import datetime,timezone, timedelta
 
 from tinkoff.invest import Client, GetOperationsByCursorRequest, Quotation
 from tinkoff.invest.constants import INVEST_GRPC_API
 
 
-BOND_NOMINAL = 10 # https://tinkoff.github.io/investAPI/head-marketdata/ В сервисе TINKOFF INVEST API для отображения цен облигаций и фьючерсов используются пункты. Для облигаций один пункт равен одному проценту номинала облигации
+DEFAULT_BOND_NOMINAL = 1000 # https://tinkoff.github.io/investAPI/head-marketdata/ В сервисе TINKOFF INVEST API для отображения цен облигаций и фьючерсов используются пункты. Для облигаций один пункт равен одному проценту номинала облигации
 
 OPERATION_STATE_EXECUTED = 1
 
+INSTRUMENT_STATUS_BASE = 1
 
 def getInstrumentType(v):
     if v==0: return ""
@@ -63,7 +65,7 @@ class OrdersApi(object):
         price = cast_to_bond_price(limit_order_request["price"])
         direction = 1 if limit_order_request["operation"]=="Buy" else 2 # 1 - покупка 2 - продажа
         order_type = 1 # 1 - лимитная 2 - рыночная
-        order_id=str(datetime.utcnow().timestamp())
+        order_id=limit_order_request("order_id", str(datetime.utcnow().timestamp()))
 
         with Client(self.token, target=INVEST_GRPC_API) as client:
             data = client.orders.post_order(account_id=self.account.id, figi=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
@@ -152,18 +154,28 @@ class MarketApi(object):
         self.account = account
         self.token = token
 
-    def market_orderbook_get_dict(self, figi, depth):
+    def market_orderbook_get_dict(self, figi, depth, bond_nominal=DEFAULT_BOND_NOMINAL):
         o = self.market_orderbook_get(figi, depth)
         return {
             "figi": o.figi,
             "depth": o.depth,
-            "bids": [{"price": round(cast_money(d.price)*BOND_NOMINAL, 7), "quantity": d.quantity} for d in o.bids],
-            "asks": [{"price": round(cast_money(d.price)*BOND_NOMINAL, 7), "quantity": d.quantity} for d in o.asks],
+            "bids": [{"price": round(cast_money(d.price)*(bond_nominal/100.), 7), "quantity": d.quantity} for d in o.bids],
+            "asks": [{"price": round(cast_money(d.price)*(bond_nominal/100.), 7), "quantity": d.quantity} for d in o.asks],
         }
 
     def market_orderbook_get(self, figi, depth):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return client.market_data.get_order_book(figi=figi, depth=depth)
+
+
+class InstrumentApi(object):
+    def __init__(self, token, account):
+        self.account = account
+        self.token = token
+
+    def bonds(self):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return client.instruments.bonds().instruments
 
 
 class Bondana(object):
@@ -183,6 +195,7 @@ class Bondana(object):
         self.operations = OperationsApi(token, account=self.account)
         self.portfolio = PortfolioApi(token, account=self.account)
         self.market = MarketApi(token, account=self.account)
+        self.instruments = InstrumentApi(token, account=self.account)
 
     def comission(self):
         return 0.5
