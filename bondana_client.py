@@ -156,11 +156,12 @@ class MarketApi(object):
 
     def market_orderbook_get_dict(self, figi, depth, bond_nominal=DEFAULT_BOND_NOMINAL):
         o = self.market_orderbook_get(figi, depth)
+        bond_nominal = bond_nominal/100.
         return {
             "figi": o.figi,
             "depth": o.depth,
-            "bids": [{"price": round(cast_money(d.price)*(bond_nominal/100.), 7), "quantity": d.quantity} for d in o.bids],
-            "asks": [{"price": round(cast_money(d.price)*(bond_nominal/100.), 7), "quantity": d.quantity} for d in o.asks],
+            "bids": [{"price": round(cast_money(d.price)*bond_nominal, 7), "quantity": d.quantity} for d in o.bids],
+            "asks": [{"price": round(cast_money(d.price)*bond_nominal, 7), "quantity": d.quantity} for d in o.asks],
         }
 
     def market_orderbook_get(self, figi, depth):
