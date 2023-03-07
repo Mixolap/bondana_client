@@ -168,6 +168,11 @@ class MarketApi(object):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return client.market_data.get_order_book(figi=figi, depth=depth)
 
+    def market_bonds_get(self):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return client.instruments.bonds()
+
+
 
 class InstrumentApi(object):
     def __init__(self, token, account):
