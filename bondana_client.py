@@ -168,9 +168,22 @@ class MarketApi(object):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return client.market_data.get_order_book(figi=figi, depth=depth)
 
+    def bond_to_json(self, bond):
+        return {
+            "figi": bond.figi,
+            "ticker": bond.ticker,
+            "isin": bond.isin,
+            "currency": bond.currency,
+            "name": bond.name,
+            "ticker": bond.ticker,
+            "min_price_increment": cast_money(bond.min_price_increment),
+            "nominal": cast_money(bond.nominal),
+        }
+
+
     def market_bonds_get(self):
         with Client(self.token, target=INVEST_GRPC_API) as client:
-            return client.instruments.bonds()
+            return [self.bond_to_json(d) for d in client.instruments.bonds().instruments]
 
 
 
