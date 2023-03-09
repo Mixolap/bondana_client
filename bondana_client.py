@@ -35,7 +35,6 @@ def cast_to_bond_price(v):
     price = v
     units = math.floor(price)
     nano = math.floor((price-units) * 1e9 + 0.1)
-    print("units", units, "nano", nano)
     return Quotation(units=units, nano=nano)
 
 
