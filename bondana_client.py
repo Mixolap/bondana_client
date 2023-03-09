@@ -35,6 +35,7 @@ def cast_to_bond_price(v):
     price = v
     units = math.floor(price)
     nano = math.floor((price-units) * 1e9 + 0.1)
+    print("units", units, "nano", nano)
     return Quotation(units=units, nano=nano)
 
 
@@ -54,10 +55,11 @@ class OrdersApi(object):
         return [{
             "figi": order.figi,
             "operation": "Buy" if order.direction==1 else "Sell",
-            "price": cast_money(order.initial_order_price),
+            "price": cast_money(order.initial_security_price),
             "order_id": order.order_id,
             "requested_lots": order.lots_requested,
             "executed_lots": order.lots_executed,
+            # "object": order,
         } for order in self.orders_get()]
 
     def orders_limit_order_post(self, figi, limit_order_request):
@@ -66,7 +68,7 @@ class OrdersApi(object):
         direction = 1 if limit_order_request["operation"]=="Buy" else 2 # 1 - покупка 2 - продажа
         order_type = 1 # 1 - лимитная 2 - рыночная
         order_id=limit_order_request.get("order_id", str(datetime.utcnow().timestamp()))
-
+        print("orders_limit_order_post", price)
         with Client(self.token, target=INVEST_GRPC_API) as client:
             data = client.orders.post_order(account_id=self.account.id, figi=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
             return data
@@ -230,3 +232,6 @@ class Bondana(object):
             if m.currency==currency:
                 blocked = cast_money(m)
         return (balance, blocked)
+
+    def convert_price_from_percent(self, price, nominal):
+        return round(price*nominal/100., 7)
