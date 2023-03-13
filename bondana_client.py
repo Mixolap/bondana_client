@@ -233,3 +233,8 @@ class Bondana(object):
 
     def convert_price_from_percent(self, price, nominal):
         return round(price*nominal/100., 7)
+
+    def accounts(self):
+        with Client(self._token, target=INVEST_GRPC_API) as client:
+            return client.users.get_accounts()
+
