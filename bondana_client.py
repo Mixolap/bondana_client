@@ -54,7 +54,7 @@ class OrdersApi(object):
         return [{
             "figi": order.figi,
             "operation": "Buy" if order.direction==1 else "Sell",
-            "price": cast_money(order.initial_security_price),
+            "price": cast_money(order.initial_order_price)/order.lots_requested,
             "order_id": order.order_id,
             "requested_lots": order.lots_requested,
             "executed_lots": order.lots_executed,
