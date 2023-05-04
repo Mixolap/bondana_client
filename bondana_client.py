@@ -178,12 +178,19 @@ class MarketApi(object):
             "ticker": bond.ticker,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
+            "maturity_date": dateToString(bond.maturity_date),
         }
 
 
     def market_bonds_get(self):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return [self.bond_to_json(d) for d in client.instruments.bonds().instruments]
+
+    def market_bond_info(self, figi):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            for d in client.instruments.bonds().instruments:
+                if d.figi==figi:
+                    return d
 
 
 
