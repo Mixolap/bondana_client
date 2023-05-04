@@ -178,7 +178,7 @@ class MarketApi(object):
             "ticker": bond.ticker,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
-            "maturity_date": dateToString(bond.maturity_date),
+            "maturity_date": dateToString(bond.maturity_date), # дата погашения
         }
 
 
