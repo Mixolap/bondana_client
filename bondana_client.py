@@ -1,6 +1,6 @@
 import math
 
-from datetime import datetime,timezone, timedelta
+from datetime import datetime, timezone, timedelta
 
 from tinkoff.invest import Client, GetOperationsByCursorRequest, Quotation
 from tinkoff.invest.constants import INVEST_GRPC_API
@@ -193,6 +193,20 @@ class MarketApi(object):
             for d in client.instruments.bonds().instruments:
                 if d.figi==figi:
                     return d
+
+    def coupon_to_json(self, data):
+        return {
+            "coupon_date": data.coupon_date,
+            "pay_one_bond": cast_money(data.pay_one_bond),
+            "coupon_period": data.coupon_period,
+        }
+
+    def market_bond_coupons(self, figi):
+        start = datetime.now()
+        end = datetime.now() + timedelta(days=30*356)
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.coupon_to_json(d) for d in client.instruments.get_bond_coupons(figi=figi, from_ = start, to = end).events]
+
 
 
 
