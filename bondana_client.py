@@ -73,7 +73,11 @@ class OrdersApi(object):
 
     def orders_cancel_post(self, order_id):
         with Client(self.token, target=INVEST_GRPC_API) as client:
-            data = client.orders.cancel_order(account_id=self.account.id, order_id=order_id)
+            if isinstance(order_id, str):
+                data = client.orders.cancel_order(account_id=self.account.id, order_id=order_id)
+            else:
+                for order in order_id:
+                    data = client.orders.cancel_order(account_id=self.account.id, order_id=order)
             return data
 
 
@@ -107,6 +111,8 @@ class OperationsApi(object):
         operation_id = op.id
         if self.getOperationType(op.type)=="Coupon":
             operation_id=op.date.strftime('%Y%m%d%H%M%S')
+        if op.type==22 and op.figi=='':
+            print("BONDANA NO FIGI", op)
         return {
             "broker_account_id": op.broker_account_id,
             "id": operation_id,
