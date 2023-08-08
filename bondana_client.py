@@ -1,6 +1,6 @@
 import math
 
-from datetime import datetime,timezone, timedelta
+from datetime import datetime, timezone, timedelta
 
 from tinkoff.invest import Client, GetOperationsByCursorRequest, Quotation
 from tinkoff.invest.constants import INVEST_GRPC_API
@@ -73,7 +73,11 @@ class OrdersApi(object):
 
     def orders_cancel_post(self, order_id):
         with Client(self.token, target=INVEST_GRPC_API) as client:
-            data = client.orders.cancel_order(account_id=self.account.id, order_id=order_id)
+            if isinstance(order_id, str):
+                data = client.orders.cancel_order(account_id=self.account.id, order_id=order_id)
+            else:
+                for order in order_id:
+                    data = client.orders.cancel_order(account_id=self.account.id, order_id=order)
             return data
 
 
@@ -107,6 +111,8 @@ class OperationsApi(object):
         operation_id = op.id
         if self.getOperationType(op.type)=="Coupon":
             operation_id=op.date.strftime('%Y%m%d%H%M%S')
+        if op.type==22 and op.figi=='':
+            print("BONDANA NO FIGI", op)
         return {
             "broker_account_id": op.broker_account_id,
             "id": operation_id,
@@ -175,7 +181,9 @@ class MarketApi(object):
             "isin": bond.isin,
             "currency": bond.currency,
             "name": bond.name,
-            "ticker": bond.ticker,
+            "uid": bond.uid,
+            "api_trade_available_flag": bond.api_trade_available_flag,
+            "for_qual_investor_flag": bond.for_qual_investor_flag,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
             "maturity_date": dateToString(bond.maturity_date), # дата погашения
@@ -207,6 +215,20 @@ class MarketApi(object):
             for d in client.instruments.bonds().instruments:
                 if d.figi==figi:
                     return d
+
+    def coupon_to_json(self, data):
+        return {
+            "coupon_date": data.coupon_date,
+            "pay_one_bond": cast_money(data.pay_one_bond),
+            "coupon_period": data.coupon_period,
+        }
+
+    def market_bond_coupons(self, figi):
+        start = datetime.now()
+        end = datetime.now() + timedelta(days=30*356)
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.coupon_to_json(d) for d in client.instruments.get_bond_coupons(figi=figi, from_ = start, to = end).events]
+
 
 
 
