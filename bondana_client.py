@@ -96,6 +96,7 @@ class OperationsApi(object):
         if v==1: return "PayIn"
         if v==2: return "Tax"        
         if v==5: return "Tax"
+        if v==6: return "Repayment"
         if v==11: return "TaxCorrection"
         if v==9: return "PayOut"
         if v==10: return "PartRepayment"
