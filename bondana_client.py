@@ -215,6 +215,12 @@ class MarketApi(object):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             for d in client.instruments.bonds().instruments:
                 if d.figi==figi:
+                    return d    
+
+    def market_bond_info_by_ticker(self, ticker):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            for d in client.instruments.bonds().instruments:
+                if d.ticker==ticker:
                     return d
 
     def coupon_to_json(self, data):
