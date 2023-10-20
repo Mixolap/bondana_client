@@ -202,6 +202,39 @@ class MarketApi(object):
             "nominal": cast_money(bond.nominal),
         }
 
+    def etfs_to_json(self, bond):
+        return {
+            "figi": bond.figi,
+            "ticker": bond.ticker,
+            "isin": bond.isin,
+            "currency": bond.currency,
+            "name": bond.name,
+            "ticker": bond.ticker,
+            "min_price_increment": cast_money(bond.min_price_increment),
+        }
+
+    def futures_to_json(self, bond):
+        return {
+            "figi": bond.figi,
+            "ticker": bond.ticker,
+            "currency": bond.currency,
+            "name": bond.name,
+            "ticker": bond.ticker,
+            "min_price_increment": cast_money(bond.min_price_increment),
+        }
+
+
+    def market_etfs_get(self):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.etfs_to_json(d) for d in client.instruments.etfs().instruments]
+
+    def market_currencies_get(self):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.shares_to_json(d) for d in client.instruments.currencies().instruments]
+
+    def market_futures_get(self):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.futures_to_json(d) for d in client.instruments.futures().instruments]
 
     def market_bonds_get(self):
         with Client(self.token, target=INVEST_GRPC_API) as client:
