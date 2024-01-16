@@ -105,6 +105,7 @@ class OperationsApi(object):
         if v==19: return "BrokerCommission"
         if v==22: return "Sell"
         if v==23: return "Coupon"
+        if v==25: return "OPERATION_TYPE_DIVIDEND_TRANSFER"
         raise Exception("unknown operation type", v)
 
     def operationToJson(self, op):
