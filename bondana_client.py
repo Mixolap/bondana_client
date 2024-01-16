@@ -268,6 +268,12 @@ class MarketApi(object):
                 if d.ticker==ticker:
                     return d
 
+    def market_bond_info_by_isin(self, isin):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            for d in client.instruments.bonds().instruments:
+                if d.isin==isin:
+                    return d
+
     def coupon_to_json(self, data):
         return {
             "coupon_date": data.coupon_date,
