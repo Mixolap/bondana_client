@@ -106,6 +106,9 @@ class OperationsApi(object):
         if v==22: return "Sell"
         if v==23: return "Coupon"
         if v==25: return "OPERATION_TYPE_DIVIDEND_TRANSFER"
+        if v==60: return "OPERATION_TYPE_INP_MULTI"
+        if v==61: return "OPERATION_TYPE_OVER_PLACEMENT"
+        if v==62: return "OPERATION_TYPE_OVER_COM"
         raise Exception("unknown operation type", v)
 
     def operationToJson(self, op):
@@ -300,6 +303,8 @@ class InstrumentApi(object):
             return client.instruments.bonds().instruments
 
 
+
+
 class Bondana(object):
     _token = ''
     _account = None
@@ -333,6 +338,24 @@ class Bondana(object):
             if m.currency==currency:
                 blocked = cast_money(m)
         return (balance, blocked)
+
+
+    def get_all_balances(self):
+        currency='rub'
+        with Client(self._token, target=INVEST_GRPC_API) as client:
+            accounts = client.users.get_accounts()
+            for acc in accounts.accounts:
+                balance = 0
+                blocked = 0
+                currencies = client.operations.get_withdraw_limits(account_id=acc.id)
+                for m in currencies.money:
+                    if m.currency == currency:
+                        balance = cast_money(m)
+                for m in currencies.blocked:
+                    if m.currency==currency:
+                        blocked = cast_money(m)
+                print(acc.name , balance, blocked)
+
 
     def convert_price_from_percent(self, price, nominal):
         return round(price*nominal/100., 7)
