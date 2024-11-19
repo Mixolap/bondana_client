@@ -5,7 +5,7 @@ with open("requirements.txt", "r") as f:
 
 setup(
     name='bondana_client',
-    version='2024.11.19163914',
+    version='2024.11.19165247',
     packages=find_packages(),
     install_requires=install_requires,
     author='Mixolap',
