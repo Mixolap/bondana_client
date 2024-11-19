@@ -2,7 +2,7 @@
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/tinkoff-investments)](https://www.python.org/downloads/)
 
-Обертка официального Tinkoff Invest API v2, оптимизированная для торговли облигациями на языке Python.
+Неофициальная обертка официального Tinkoff Invest API v2, оптимизированная для торговли облигациями на языке Python.
 
 > :warning: **На данный момент отлажена работа на облигациях номиналом 1000 рублей, на других номиналах не тестировалось**
 
