@@ -30,7 +30,7 @@ jobs:
         git config --global user.name "Mixolap"
 
     - name: Bump version
-      run: bump2version --bump patch
+      run: bump2version --new-version $(date +"%Y.%m.%d%H%M%S") patch
 
     - name: Build and publish
       env:
