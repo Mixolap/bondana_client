@@ -11,9 +11,8 @@
 <!-- termynal -->
 
 ```
-$ pip install tinkoff-investments
+$ pip install bondana-client
 
-$ git clone https://github.com/Mixolap/bondana_client.git
 ```
 
 ## Как пользоваться
@@ -21,7 +20,7 @@ $ git clone https://github.com/Mixolap/bondana_client.git
 ### Инициализация клиента
 
 ```python
-from bondana_client.bondana_client import Bondana
+from bondana_client import Bondana
 
 TOKEN = 'token'
 
