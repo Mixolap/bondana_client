@@ -37,6 +37,8 @@ balance_rub, blocked = client.get_balance('rub')
 
 ```python
 client.portfolio.portfolio_get()
+for bond in portfolio.positions:
+    print(bond)
 ```
 
 ### Получение истории операций
@@ -99,10 +101,15 @@ figi = "BBG00Y9B45C2"
 orderbook = client.market.market_orderbook_get_dict(figi, 20)
 ```
 
+### Получение списка всех доступных облигаций
+
+```python
+bonds = client.market.market_bonds_get()
+for bond in bonds:
+	print(bond)
+```
 
 ## TODO:
-
-получение списка доступных облигаций
 
 получение лотности
 
