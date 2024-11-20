@@ -68,7 +68,7 @@ class OrdersApi(object):
         order_type = 1 # 1 - лимитная 2 - рыночная
         order_id=limit_order_request.get("order_id", str(datetime.utcnow().timestamp()))
         with Client(self.token, target=INVEST_GRPC_API) as client:
-            data = client.orders.post_order(account_id=self.account.id, figi=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
+            data = client.orders.post_order(account_id=self.account.id, instrument_id=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
             return data
 
     def orders_cancel_post(self, order_id):
