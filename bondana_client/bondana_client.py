@@ -189,6 +189,9 @@ class MarketApi(object):
             "uid": bond.uid,
             "api_trade_available_flag": bond.api_trade_available_flag,
             "for_qual_investor_flag": bond.for_qual_investor_flag,
+            "liquidity_flag": bond.liquidity_flag,
+            "amortization_flag": bond.amortization_flag,
+            "risk_level": bond.risk_level,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
             "maturity_date": dateToString(bond.maturity_date), # дата погашения
