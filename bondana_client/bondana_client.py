@@ -37,7 +37,6 @@ def cast_to_bond_price(v):
     nano = math.floor((price-units) * 1e9 + 0.1)
     return Quotation(units=units, nano=nano)
 
-
 class OrdersApi(object):
     token = None
     account = None
@@ -191,7 +190,8 @@ class MarketApi(object):
             "for_qual_investor_flag": bond.for_qual_investor_flag,
             "liquidity_flag": bond.liquidity_flag,
             "amortization_flag": bond.amortization_flag,
-            "risk_level": bond.risk_level,
+            "risk_level": int(bond.risk_level),
+            "klong": bond.klong.units,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
             "maturity_date": dateToString(bond.maturity_date), # дата погашения
