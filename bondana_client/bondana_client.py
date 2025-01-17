@@ -299,7 +299,7 @@ class MarketApi(object):
             "volume": data.volume,
             "time": data.time,
             "is_complete": data.is_complete,
-            "candle_source": data.candle_source,
+            "candle_source_type": data.candle_source_type,
         }
 
     def market_bond_coupons(self, figi):
