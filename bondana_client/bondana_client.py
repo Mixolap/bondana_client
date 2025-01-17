@@ -290,7 +290,6 @@ class MarketApi(object):
         }
 
     def candle_to_json(self, data):
-        print(data)
         return {
             "open": cast_money(data.open),
             "high": cast_money(data.high),
