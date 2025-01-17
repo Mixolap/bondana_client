@@ -4,6 +4,8 @@ from datetime import datetime, timezone, timedelta
 
 from tinkoff.invest import Client, GetOperationsByCursorRequest, Quotation
 from tinkoff.invest.constants import INVEST_GRPC_API
+from tinkoff.invest.schemas import CandleInterval
+from tinkoff.invest.schemas import CandleSource
 
 
 DEFAULT_BOND_NOMINAL = 1000 # https://tinkoff.github.io/investAPI/head-marketdata/ В сервисе TINKOFF INVEST API для отображения цен облигаций и фьючерсов используются пункты. Для облигаций один пункт равен одному проценту номинала облигации
@@ -287,13 +289,28 @@ class MarketApi(object):
             "coupon_period": data.coupon_period,
         }
 
+    def candle_to_json(self, data):
+        print(data)
+        return {
+            "open": cast_money(data.open),
+            "high": cast_money(data.high),
+            "low": cast_money(data.low),
+            "close": cast_money(data.close),
+            "volume": data.volume,
+            "time": data.time,
+            "is_complete": data.is_complete,
+            "candle_source": data.candle_source,
+        }
+
     def market_bond_coupons(self, figi):
         start = datetime.now()
         end = datetime.now() + timedelta(days=30*356)
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return [self.coupon_to_json(d) for d in client.instruments.get_bond_coupons(figi=figi, from_ = start, to = end).events]
 
-
+    def candles(self, figi, from_, to, interval, candle_source_type=CandleSource.CANDLE_SOURCE_EXCHANGE):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return [self.candle_to_json(d) for d in client.market_data.get_candles(figi=figi, from_ = from_, to = to, interval=interval, candle_source_type=candle_source_type).candles]
 
 
 class InstrumentApi(object):

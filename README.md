@@ -109,6 +109,14 @@ for bond in bonds:
 	print(bond)
 ```
 
+### Получение свечей
+
+```python
+candles = client.market.candles(figi, from_, to, interval, candle_source_type)
+for candle in candles:
+	print(candle)
+```
+
 ## TODO:
 
 получение лотности
