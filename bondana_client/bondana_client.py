@@ -67,7 +67,7 @@ class OrdersApi(object):
         price = cast_to_bond_price(limit_order_request["price"])
         direction = 1 if limit_order_request["operation"]=="Buy" else 2 # 1 - покупка 2 - продажа
         order_type = 1 # 1 - лимитная 2 - рыночная
-        order_id=limit_order_request.get("order_id", str(datetime.utcnow().timestamp()))
+        order_id=limit_order_request.get("order_id", "")
         with Client(self.token, target=INVEST_GRPC_API) as client:
             data = client.orders.post_order(account_id=self.account.id, instrument_id=figi, quantity=quantity, price=price, direction=direction, order_type=order_type, order_id=order_id)
             return data
