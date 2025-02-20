@@ -204,6 +204,7 @@ class MarketApi(object):
             "figi": bond.figi,
             "ticker": bond.ticker,
             "isin": bond.isin,
+            "lot": bond.lot,
             "currency": bond.currency,
             "name": bond.name,
             "ticker": bond.ticker,
