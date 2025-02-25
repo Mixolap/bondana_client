@@ -177,6 +177,16 @@ class MarketApi(object):
             "asks": [{"price": round(cast_money(d.price)*bond_nominal, 7), "quantity": d.quantity} for d in o.asks],
         }
 
+    def market_orderbook(self, figi, depth):
+        o = self.market_orderbook_get(figi, depth)
+        print(o)
+        return {
+            "figi": o.figi,
+            "depth": o.depth,
+            "bids": [{"price": round(cast_money(d.price), 7), "quantity": d.quantity} for d in o.bids],
+            "asks": [{"price": round(cast_money(d.price), 7), "quantity": d.quantity} for d in o.asks],
+        }
+
     def market_orderbook_get(self, figi, depth):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return client.market_data.get_order_book(figi=figi, depth=depth)
@@ -300,7 +310,7 @@ class MarketApi(object):
             "volume": data.volume,
             "time": data.time,
             "is_complete": data.is_complete,
-            "candle_source_type": data.candle_source_type,
+            "candle_source": data.candle_source,
         }
 
     def market_bond_coupons(self, figi):
