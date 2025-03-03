@@ -346,7 +346,6 @@ class Bondana(object):
             accounts = client.users.get_accounts()
             for acc in accounts.accounts:
                 if acc.type==1:
-                    print(acc)
                     self.account = acc
 
         self.orders = OrdersApi(token, account=self.account)
