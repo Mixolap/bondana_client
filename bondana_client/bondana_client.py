@@ -103,6 +103,7 @@ class OperationsApi(object):
         if v==9: return "PayOut"
         if v==10: return "PartRepayment"
         if v==12: return "ServiceCommission"
+        if v==14: return "OPERATION_TYPE_MARGIN_FEE"
         if v==15: return "Buy"
         if v==19: return "BrokerCommission"
         if v==22: return "Sell"
