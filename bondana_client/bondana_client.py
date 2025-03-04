@@ -17,6 +17,7 @@ INSTRUMENT_STATUS_BASE = 1
 def getInstrumentType(v):
     if v==0: return ""
     if v==1: return "Bond"
+    if v==2: return "Share"
     if v==3: return "Currency"
     raise Exception("unknown operation type", v)
 
@@ -110,7 +111,7 @@ class OperationsApi(object):
         if v==59: return "OPERATION_TYPE_OUT_MULTI"
         if v==60: return "OPERATION_TYPE_INP_MULTI"
         if v==61: return "OPERATION_TYPE_OVER_PLACEMENT"
-        if v==62: return "OPERATION_TYPE_OVER_COM"
+        if v==62: return "OPERATION_TYPE_OVER_COM"        
         raise Exception("unknown operation type", v)
 
     def operationToJson(self, op):
