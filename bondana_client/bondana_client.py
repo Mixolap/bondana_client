@@ -335,7 +335,9 @@ class InstrumentApi(object):
         with Client(self.token, target=INVEST_GRPC_API) as client:
             return client.instruments.bonds().instruments
 
-
+    def get_dividends(self, figi, from_, to):
+        with Client(self.token, target=INVEST_GRPC_API) as client:
+            return client.instruments.get_dividends(figi=figi, from_=from_, to=to)
 
 
 class Bondana(object):
