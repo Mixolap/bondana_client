@@ -19,6 +19,7 @@ def getInstrumentType(v):
     if v==1: return "Bond"
     if v==2: return "Share"
     if v==3: return "Currency"
+    if v==5: return "Futures"
     raise Exception("unknown operation type", v)
 
 
