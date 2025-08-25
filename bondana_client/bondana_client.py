@@ -111,6 +111,7 @@ class OperationsApi(object):
         if v==23: return "Coupon"
         if v==25: return "OPERATION_TYPE_DIVIDEND_TRANSFER"
         if v==26: return "OPERATION_TYPE_ACCRUING_VARMARGIN"
+        if v==27: return "OPERATION_TYPE_WRITING_OFF_VARMARGIN"
         if v==59: return "OPERATION_TYPE_OUT_MULTI"
         if v==60: return "OPERATION_TYPE_INP_MULTI"
         if v==61: return "OPERATION_TYPE_OVER_PLACEMENT"
