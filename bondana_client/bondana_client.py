@@ -225,6 +225,10 @@ class MarketApi(object):
             "currency": bond.currency,
             "name": bond.name,
             "ticker": bond.ticker,
+            "klong": bond.klong.units,
+            "kshort": bond.kshort.units,
+            "dlong": bond.klong.units,
+            "dshort": bond.kshort.units,
             "min_price_increment": cast_money(bond.min_price_increment),
             "nominal": cast_money(bond.nominal),
         }
